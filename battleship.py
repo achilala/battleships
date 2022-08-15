@@ -59,9 +59,10 @@ class Battleship():
         self.WARM = "Warm"
         self.COLD = "Cold"
 
-        # chose sets because like dict, and unlike tuple or lists, they don't contain duplicate values
+        # chose a set because like dict, and unlike tuple or lists, they don't contain duplicate values
         self.SHIPS_LIST = set()
-        self.GUESS_LIST = set()
+        # chose a list because unlike sets they are ordered
+        self.GUESS_LIST = []
         self.NUM_OF_GUESSES = 0
         self.NUM_OF_SUNK_SHIPS = 0
 
@@ -121,6 +122,7 @@ class Battleship():
 Ships sunk: {self.NUM_OF_SUNK_SHIPS} of {self.NUM_OF_SHIPS}
 Guesses left: {self.NUM_OF_TOTAL_GUESSES - self.NUM_OF_GUESSES} of {self.NUM_OF_TOTAL_GUESSES}
 Accuracy: {self.NUM_OF_SUNK_SHIPS / self.NUM_OF_GUESSES * 100}%
+Guesses: {",".join(self.GUESS_LIST)}
 
 {stdout}
 -- -- -- -- -- -- -- -- -- --
@@ -185,7 +187,7 @@ Accuracy: {self.NUM_OF_SUNK_SHIPS / self.NUM_OF_GUESSES * 100}%
             else:
                 guessed_ship_location = input(prompt_nth).lower()
 
-        self.GUESS_LIST.add(guessed_ship_location)
+        self.GUESS_LIST.append(guessed_ship_location)
         return guessed_ship_location
 
 
