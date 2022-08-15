@@ -77,24 +77,22 @@ class Battleship():
         """
         This method displays a board in a formatted and presentable manner and can include a title
         """
-        formatted_col_label = ""
-        formatted_row_label = ""
-        row_index = 0
+        col_label_formatted = " ".join(self.BOARD_LABELS_COLS)
+        row_label_formatted = ""
+        row_label_index = 0
 
-        for label in self.BOARD_LABELS_COLS:
-            formatted_col_label += f"{label} "
-
-        print(f"\n   {formatted_col_label.strip()}")
+        print(f"\n   {col_label_formatted}")
         
         for row in board:
-            formatted_row_label = self.BOARD_LABELS_ROWS[row_index].rjust(2, " ")
-            print(f"{formatted_row_label}{self.BOARD_TILE_EDGE}{self.BOARD_TILE_EDGE.join(row)}{self.BOARD_TILE_EDGE}")
-            row_index += 1
+            row_label_formatted = self.BOARD_LABELS_ROWS[row_label_index].rjust(2, " ")
+            print(f"{row_label_formatted}{self.BOARD_TILE_EDGE}{self.BOARD_TILE_EDGE.join(row)}{self.BOARD_TILE_EDGE}")
+            row_label_index += 1
 
         divide_by_half = 2
         title_padding_size = int(self.BOARD_SIZE_COLS / divide_by_half) + len(board_title)
         board_name = board_title.rjust(title_padding_size, " ")
         print(f"{board_name}\n")
+
 
     def display_hidden_board(self) -> None:
         """
@@ -190,7 +188,7 @@ Accuracy: {self.NUM_OF_SUNK_SHIPS / self.NUM_OF_GUESSES * 100}%
         self.GUESS_LIST.add(guessed_ship_location)
         return guessed_ship_location
 
-    
+
     def translate_input_to_board_location(self, guessed_ship_location: str) -> tuple:
         ship_col = self.BOARD_LABELS_COLS.index(guessed_ship_location[1:])
         ship_row = self.BOARD_LABELS_ROWS.index(guessed_ship_location[0])
@@ -224,7 +222,7 @@ Accuracy: {self.NUM_OF_SUNK_SHIPS / self.NUM_OF_GUESSES * 100}%
         else:
             return self.COLD
 
-    
+
     def play(self):
         """
         This method starts the game
