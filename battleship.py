@@ -42,6 +42,8 @@ class Battleship():
             # ,"i"
             # ,"j"
         ]
+        self.COL_INPUT_FORMAT = f"[{self.BOARD_COL_LABELS[0]}-{self.BOARD_COL_LABELS[-1]}]"
+        self.ROW_INPUT_FORMAT = f"[{self.BOARD_ROW_LABELS[0]}-{self.BOARD_ROW_LABELS[-1]}]"
         self.BOARD_COL_SIZE = len(self.BOARD_COL_LABELS)
         self.BOARD_ROW_SIZE = len(self.BOARD_ROW_LABELS)
         self.BOARD_TILE_BLANK = " "
@@ -167,16 +169,10 @@ Guesses: {" ".join(self.GUESS_LIST)}
         It also verifies that a valid entry is provided otherwise keeps prompting
         Valid inputs are then added to a "guess list" :)
         """
-        col_first_label = self.BOARD_COL_LABELS[0]
-        col_last_label = self.BOARD_COL_LABELS[-1]
-        row_first_label = self.BOARD_ROW_LABELS[0]
-        row_last_label = self.BOARD_ROW_LABELS[-1]
-        min_input_size = len(col_first_label) + len(row_first_label)
-        col_regex_format = f"[{col_first_label}-{col_last_label}]"
-        row_regex_format = f"[{row_first_label}-{row_last_label}]"
+        min_input_size = len(self.BOARD_COL_LABELS[0]) + len(self.BOARD_ROW_LABELS[0])
         
         prompt_1st = f"\nPlease guess a ship's location: "
-        prompt_nth = f"\nInvalid entry provided, please re-try in this format {row_regex_format}{col_regex_format} i.e d6: "
+        prompt_nth = f"\nInvalid entry provided, please re-try in this format {self.ROW_INPUT_FORMAT}{self.COL_INPUT_FORMAT} i.e d6: "
         prompt_guessed_already = "\nYou've guessed that one already, please try another: "
         
         guessed_ship_location = input(prompt_1st).lower()
@@ -241,7 +237,7 @@ How to play:
         - or "{self.COLD}" if further away
     - The icon for a hit is "{self.HIT_ICON}" and "{self.MISS_ICON}" for a miss
     - Guesses should be provided starting with the letter of the board and then the number
-      in this format [a-h][1-8] i.e d6
+      in this format {self.ROW_INPUT_FORMAT}{self.COL_INPUT_FORMAT} i.e d6
     - Invalid or repeat inputs don't count as guesses, you'll be prompted to try again
 
 Enjoy the game!
