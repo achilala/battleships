@@ -18,7 +18,7 @@ class Battleship():
         self.NUM_OF_TOTAL_GUESSES = num_of_total_guesses
         self.SHOW_HIDDEN_BOARD = show_hidden_board
 
-        self.BOARD_LABELS_COLS = [
+        self.BOARD_COL_LABELS = [
              "1"
             ,"2"
             ,"3"
@@ -30,7 +30,7 @@ class Battleship():
             # ,"9"
             # ,"10"
         ]
-        self.BOARD_LABELS_ROWS = [
+        self.BOARD_ROW_LABELS = [
              "a"
             ,"b"
             ,"c"
@@ -42,9 +42,9 @@ class Battleship():
             # ,"i"
             # ,"j"
         ]
-        self.BOARD_SIZE_COLS = len(self.BOARD_LABELS_COLS)
-        self.BOARD_SIZE_ROWS = len(self.BOARD_LABELS_ROWS)
-        self.BOARD_BLANK_TILE = " "
+        self.BOARD_COL_SIZE = len(self.BOARD_COL_LABELS)
+        self.BOARD_ROW_SIZE = len(self.BOARD_ROW_LABELS)
+        self.BOARD_TILE_BLANK = " "
         self.BOARD_TILE_EDGE = "|"
 
         self.HIDDEN_BOARD = self.create_board()
@@ -71,26 +71,26 @@ class Battleship():
         """
         This method generates a board based on the size of the column and row labels
         """
-        return [[self.BOARD_BLANK_TILE] * self.BOARD_SIZE_COLS for _ in range(self.BOARD_SIZE_ROWS)]
+        return [[self.BOARD_TILE_BLANK] * self.BOARD_COL_SIZE for _ in range(self.BOARD_ROW_SIZE)]
 
 
     def display_board(self, board: list, board_title: str) -> None:
         """
         This method displays a board in a formatted and presentable manner and can include a title
         """
-        col_label_formatted = " ".join(self.BOARD_LABELS_COLS)
+        col_label_formatted = " ".join(self.BOARD_COL_LABELS)
         row_label_formatted = ""
         row_label_index = 0
 
         print(f"\n   {col_label_formatted}")
         
         for row in board:
-            row_label_formatted = self.BOARD_LABELS_ROWS[row_label_index].rjust(2, " ")
+            row_label_formatted = self.BOARD_ROW_LABELS[row_label_index].rjust(2, " ")
             print(f"{row_label_formatted}{self.BOARD_TILE_EDGE}{self.BOARD_TILE_EDGE.join(row)}{self.BOARD_TILE_EDGE}")
             row_label_index += 1
 
         divide_by_half = 2
-        title_padding_size = int(self.BOARD_SIZE_COLS / divide_by_half) + len(board_title)
+        title_padding_size = int(self.BOARD_COL_SIZE / divide_by_half) + len(board_title)
         board_name = board_title.rjust(title_padding_size, " ")
         print(f"{board_name}\n")
 
@@ -122,7 +122,7 @@ class Battleship():
 Ships sunk: {self.NUM_OF_SUNK_SHIPS} of {self.NUM_OF_SHIPS}
 Guesses left: {self.NUM_OF_TOTAL_GUESSES - self.NUM_OF_GUESSES} of {self.NUM_OF_TOTAL_GUESSES}
 Accuracy: {self.NUM_OF_SUNK_SHIPS / self.NUM_OF_GUESSES * 100}%
-Guesses: {",".join(self.GUESS_LIST)}
+Guesses: {" ".join(self.GUESS_LIST)}
 
 {stdout}
 -- -- -- -- -- -- -- -- -- --
@@ -134,7 +134,7 @@ Guesses: {",".join(self.GUESS_LIST)}
         This method generates random ship locations and adds them to a list of ships
         """
         while len(self.SHIPS_LIST) < self.NUM_OF_SHIPS:
-            ship_col, ship_row = randint(0, self.BOARD_SIZE_COLS - 1), randint(0, self.BOARD_SIZE_ROWS - 1)
+            ship_col, ship_row = randint(0, self.BOARD_COL_SIZE - 1), randint(0, self.BOARD_ROW_SIZE - 1)
             self.SHIPS_LIST.add((ship_col, ship_row))
 
 
@@ -167,10 +167,10 @@ Guesses: {",".join(self.GUESS_LIST)}
         It also verifies that a valid entry is provided otherwise keeps prompting
         Valid inputs are then added to a "guess list" :)
         """
-        col_first_label = self.BOARD_LABELS_COLS[0]
-        col_last_label = self.BOARD_LABELS_COLS[-1]
-        row_first_label = self.BOARD_LABELS_ROWS[0]
-        row_last_label = self.BOARD_LABELS_ROWS[-1]
+        col_first_label = self.BOARD_COL_LABELS[0]
+        col_last_label = self.BOARD_COL_LABELS[-1]
+        row_first_label = self.BOARD_ROW_LABELS[0]
+        row_last_label = self.BOARD_ROW_LABELS[-1]
         min_input_size = len(col_first_label) + len(row_first_label)
         col_regex_format = f"[{col_first_label}-{col_last_label}]"
         row_regex_format = f"[{row_first_label}-{row_last_label}]"
@@ -181,7 +181,7 @@ Guesses: {",".join(self.GUESS_LIST)}
         
         guessed_ship_location = input(prompt_1st).lower()
 
-        while len(guessed_ship_location) < min_input_size or guessed_ship_location[0] not in self.BOARD_LABELS_ROWS or guessed_ship_location[1:] not in self.BOARD_LABELS_COLS or guessed_ship_location in self.GUESS_LIST:
+        while len(guessed_ship_location) < min_input_size or guessed_ship_location[0] not in self.BOARD_ROW_LABELS or guessed_ship_location[1:] not in self.BOARD_COL_LABELS or guessed_ship_location in self.GUESS_LIST:
             if guessed_ship_location in self.GUESS_LIST:
                 guessed_ship_location = input(prompt_guessed_already).lower()
             else:
@@ -192,8 +192,8 @@ Guesses: {",".join(self.GUESS_LIST)}
 
 
     def translate_input_to_board_location(self, guessed_ship_location: str) -> tuple:
-        ship_col = self.BOARD_LABELS_COLS.index(guessed_ship_location[1:])
-        ship_row = self.BOARD_LABELS_ROWS.index(guessed_ship_location[0])
+        ship_col = self.BOARD_COL_LABELS.index(guessed_ship_location[1:])
+        ship_row = self.BOARD_ROW_LABELS.index(guessed_ship_location[0])
         return ship_col, ship_row
 
 
@@ -206,7 +206,7 @@ Guesses: {",".join(self.GUESS_LIST)}
         For instance, d6 is 3 cells away from c8 because (3 - 2) + (7 - 5) = 3, so they'd be told they were "warm"
         Returns "hit" when distance is 0
         """
-        furthest_possible_distance = (self.BOARD_SIZE_COLS + self.BOARD_SIZE_ROWS) - 2
+        furthest_possible_distance = (self.BOARD_COL_SIZE + self.BOARD_ROW_SIZE) - 2
         nearest_ship = furthest_possible_distance
         guessed_ship_col, guessed_ship_row = guessed_ship_location
 
@@ -266,7 +266,7 @@ Enjoy the game!
                 self.place_icon_on_board(
                      board = self.HIDDEN_BOARD
                     ,location = guessed_ship_location
-                    ,icon = self.BOARD_BLANK_TILE
+                    ,icon = self.BOARD_TILE_BLANK
                 )
 
             else:

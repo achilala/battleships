@@ -70,7 +70,7 @@ class TestBattleship(unittest.TestCase):
 
     def test__distance_from_nearest_ship__warm(self):
         """
-        As an example, d6 is three cells away from c8 because abs(3 - 2) + abs(7 - 5) = 3, so they'd be told they were "warm"
+        As an example, d6 is three cells away from c8 because abs(3 - 2) + abs(7 - 5) = 3, so they'd be told they were "Warm"
         """
         guessed_input = "d6"
         ship1_input = "c8"
@@ -86,7 +86,7 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
         """
-        In this example, d6 is 4 cells away from f4 because abs(3 - 5) + abs(3 - 5) = 4, so they'd be told they were still "warm"
+        In this example, d6 is 4 cells away from f4 because abs(3 - 5) + abs(3 - 5) = 4, so they'd be told they were still "Warm"
         """
         ship1_input = "f4"
         ship1_location = self.game.translate_input_to_board_location(ship1_input)
