@@ -23,20 +23,20 @@ Chose to go with Python, and code can be run from the CLI as follows:
 
 ### Play the game
 ```bash
-python3 play_battleship.py
+python3 play_battleships.py
 ```
 
 ### Run tests
 ```bash
-python3 test_battleship.py
+python3 test_battleships.py
 ```
 
 ### How To Instantiate the class
 You can override the default settings such as the number of ships and/or total guesses at runtime.
 ```py
-from battleship import Battleship
+from battleships import Battleships
 
-game = Battleship(
+game = Battleships(
      num_of_ships=3
     ,num_of_max_guesses=15
 )
@@ -45,9 +45,9 @@ game.play()
 
 You can choose to show the hidden board for testing purposes as well.
 ```py
-from battleship import Battleship
+from battleships import Battleships
 
-game = Battleship(
+game = Battleships(
     show_hidden_board=True
 )
 game.play()

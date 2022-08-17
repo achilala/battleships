@@ -1,6 +1,147 @@
 from random import randint
 
-class Battleship():
+class Board():
+    """
+    The single responsibility of this class is the board
+    The Board size is dynamic and depends on the number of labels
+    """
+
+    COL_LABELS = [
+         "1"
+        ,"2"
+        ,"3"
+        ,"4"
+        ,"5"
+        ,"6"
+        ,"7"
+        ,"8"
+        # ,"9"
+        # ,"10"
+    ]
+    ROW_LABELS = [
+         "a"
+        ,"b"
+        ,"c"
+        ,"d"
+        ,"e"
+        ,"f"
+        ,"g"
+        ,"h"
+        # ,"i"
+        # ,"j"
+    ]
+    COL_INPUT_FORMAT = f"[{COL_LABELS[0]}-{COL_LABELS[-1]}]"
+    ROW_INPUT_FORMAT = f"[{ROW_LABELS[0]}-{ROW_LABELS[-1]}]"
+    COL_SIZE = len(COL_LABELS)
+    ROW_SIZE = len(ROW_LABELS)
+    MIN_INPUT_SIZE = len(COL_LABELS[0]) + len(ROW_LABELS[0])
+    MAX_BOARD_DISTANCE = (COL_SIZE + ROW_SIZE) - 2
+    TILE_BLANK = " "
+    TILE_EDGE = "|"    
+
+    def get_col_labels() -> list:
+        """
+        This method returns column labels
+        """
+        return Board.COL_LABELS
+    
+
+    def get_row_labels() -> list:
+        """
+        This method returns row labels
+        """
+        return Board.ROW_LABELS
+    
+
+    def get_col_size() -> int:
+        """
+        This method returns column label size
+        """
+        return Board.COL_SIZE
+    
+
+    def get_row_size() -> int:
+        """
+        This method returns row label size
+        """
+        return Board.ROW_SIZE
+    
+
+    def get_min_input_size() -> int:
+        """
+        This method returns the minimum allowed input size for a valid coordinate
+        """
+        return Board.MIN_INPUT_SIZE
+    
+
+    def get_max_board_distance() -> int:
+        """
+        This method returns the furthest possible distance between two locations on the board
+        """
+        return Board.MAX_BOARD_DISTANCE
+    
+
+    def get_col_input_format() -> str:
+        """
+        This method returns the allowed range of column label inputs when prompted
+        """
+        return Board.COL_INPUT_FORMAT
+    
+
+    def get_row_input_format() -> str:
+        """
+        This method returns the allowed range of row label inputs when prompted
+        """
+        return Board.ROW_INPUT_FORMAT
+
+
+    def create_board() -> list:
+        """
+        This method generates a board based on the size of the column and row labels
+        """
+        return [[Board.TILE_BLANK] * Board.COL_SIZE for _ in range(Board.ROW_SIZE)]
+
+
+    def display_board(board: list, board_title: str) -> None:
+        """
+        This method displays a board in a formatted and presentable manner and can include a title
+        """
+        col_label_formatted = " ".join(Board.COL_LABELS)
+        row_label_formatted = ""
+        row_label_index = 0
+
+        print(f"\n   {col_label_formatted}")
+        
+        for row in board:
+            row_label_formatted = Board.ROW_LABELS[row_label_index].rjust(2, " ")
+            print(f"{row_label_formatted}{Board.TILE_EDGE}{Board.TILE_EDGE.join(row)}{Board.TILE_EDGE}")
+            row_label_index += 1
+
+        split_in_half = 0.5
+        title_padding_size = int(Board.COL_SIZE * split_in_half) + len(board_title)
+        board_name = board_title.rjust(title_padding_size, " ")
+        print(f"{board_name}\n")
+
+
+    def place_icon_on_board(board: list, location: tuple, icon: str) -> None:
+        """
+        This method is useful for writing and/or removing icons on/from a board
+        Removed icons are simply replaced with a blank tile
+        """
+        ship_col, ship_row = location
+        board[ship_row][ship_col] = icon
+
+
+    def remove_icon_from_board(board: list, location: tuple) -> None:
+        """
+        This method is useful for writing and/or removing icons on/from a board
+        Removed icons are simply replaced with a blank tile
+        """
+        ship_col, ship_row = location
+        board[ship_row][ship_col] = Board.TILE_BLANK
+
+
+class Battleships():
 
     def __init__(
              self
@@ -11,46 +152,14 @@ class Battleship():
         """
         This constructor defines class variables and initializes their state
         Number of ships, total guesses are paramertized and assigned at runtime
-        The Board size is dynamic and depends on the number of labels
         The hidden board can also be displayed at runtime for testing purposes
         """
         self.NUM_OF_SHIPS = num_of_ships
         self.NUM_OF_TOTAL_GUESSES = num_of_total_guesses
         self.SHOW_HIDDEN_BOARD = show_hidden_board
 
-        self.BOARD_COL_LABELS = [
-             "1"
-            ,"2"
-            ,"3"
-            ,"4"
-            ,"5"
-            ,"6"
-            ,"7"
-            ,"8"
-            # ,"9"
-            # ,"10"
-        ]
-        self.BOARD_ROW_LABELS = [
-             "a"
-            ,"b"
-            ,"c"
-            ,"d"
-            ,"e"
-            ,"f"
-            ,"g"
-            ,"h"
-            # ,"i"
-            # ,"j"
-        ]
-        self.COL_INPUT_FORMAT = f"[{self.BOARD_COL_LABELS[0]}-{self.BOARD_COL_LABELS[-1]}]"
-        self.ROW_INPUT_FORMAT = f"[{self.BOARD_ROW_LABELS[0]}-{self.BOARD_ROW_LABELS[-1]}]"
-        self.BOARD_COL_SIZE = len(self.BOARD_COL_LABELS)
-        self.BOARD_ROW_SIZE = len(self.BOARD_ROW_LABELS)
-        self.BOARD_TILE_BLANK = " "
-        self.BOARD_TILE_EDGE = "|"
-
-        self.HIDDEN_BOARD = self.create_board()
-        self.PLAYING_BOARD = self.create_board()
+        self.HIDDEN_BOARD = Board.create_board()
+        self.PLAYING_BOARD = Board.create_board()
 
         self.SHIP_ICON = "s"
         self.HIT_ICON = "@"
@@ -69,39 +178,11 @@ class Battleship():
         self.NUM_OF_SUNK_SHIPS = 0
 
 
-    def create_board(self) -> list:
-        """
-        This method generates a board based on the size of the column and row labels
-        """
-        return [[self.BOARD_TILE_BLANK] * self.BOARD_COL_SIZE for _ in range(self.BOARD_ROW_SIZE)]
-
-
-    def display_board(self, board: list, board_title: str) -> None:
-        """
-        This method displays a board in a formatted and presentable manner and can include a title
-        """
-        col_label_formatted = " ".join(self.BOARD_COL_LABELS)
-        row_label_formatted = ""
-        row_label_index = 0
-
-        print(f"\n   {col_label_formatted}")
-        
-        for row in board:
-            row_label_formatted = self.BOARD_ROW_LABELS[row_label_index].rjust(2, " ")
-            print(f"{row_label_formatted}{self.BOARD_TILE_EDGE}{self.BOARD_TILE_EDGE.join(row)}{self.BOARD_TILE_EDGE}")
-            row_label_index += 1
-
-        divide_by_half = 2
-        title_padding_size = int(self.BOARD_COL_SIZE / divide_by_half) + len(board_title)
-        board_name = board_title.rjust(title_padding_size, " ")
-        print(f"{board_name}\n")
-
-
     def display_hidden_board(self) -> None:
         """
         This method displays the hidden board
         """
-        self.display_board(self.HIDDEN_BOARD, "Hidden Board")
+        Board.display_board(self.HIDDEN_BOARD, "Hidden Board")
 
 
     def display_playing_board(self) -> None:
@@ -112,7 +193,7 @@ class Battleship():
         if self.SHOW_HIDDEN_BOARD:
             self.display_hidden_board()
 
-        self.display_board(self.PLAYING_BOARD, "Playing Board")
+        Board.display_board(self.PLAYING_BOARD, "Playing Board")
 
 
     def display_score_board(self, stdout: str) -> None:
@@ -136,17 +217,8 @@ Guesses: {" ".join(self.GUESS_LIST)}
         This method generates random ship locations and adds them to a list of ships
         """
         while len(self.SHIPS_LIST) < self.NUM_OF_SHIPS:
-            ship_col, ship_row = randint(0, self.BOARD_COL_SIZE - 1), randint(0, self.BOARD_ROW_SIZE - 1)
+            ship_col, ship_row = randint(0, Board.get_col_size() - 1), randint(0, Board.get_row_size() - 1)
             self.SHIPS_LIST.add((ship_col, ship_row))
-
-
-    def place_icon_on_board(self, board: list, location: tuple, icon: str) -> None:
-        """
-        This method is useful for writing and/or removing icons on/from a board
-        Removed icons are simply replaced with a blank tile
-        """
-        ship_col, ship_row = location
-        board[ship_row][ship_col] = icon
 
 
     def place_ships_on_hidden_board(self) -> None:
@@ -156,7 +228,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         self.generate_random_ship_locations()
 
         for ship_location in self.SHIPS_LIST:
-            self.place_icon_on_board(
+            Board.place_icon_on_board(
                  board = self.HIDDEN_BOARD
                 ,location = ship_location
                 ,icon = self.SHIP_ICON
@@ -168,16 +240,14 @@ Guesses: {" ".join(self.GUESS_LIST)}
         This method prompts the user for a guess of a ship's location and returns the valid input
         It also verifies that a valid entry is provided otherwise keeps prompting
         Valid inputs are then added to a "guess list" :)
-        """
-        min_input_size = len(self.BOARD_COL_LABELS[0]) + len(self.BOARD_ROW_LABELS[0])
-        
+        """        
         prompt_1st = f"\nPlease guess a ship's location: "
-        prompt_nth = f"\nInvalid entry provided, please re-try in this format {self.ROW_INPUT_FORMAT}{self.COL_INPUT_FORMAT} i.e d6: "
+        prompt_nth = f"\nInvalid entry provided, please re-try in this format {Board.get_row_input_format()}{Board.get_col_input_format()} i.e d6: "
         prompt_guessed_already = "\nYou've guessed that one already, please try another: "
         
         guessed_ship_location = input(prompt_1st).lower()
 
-        while len(guessed_ship_location) < min_input_size or guessed_ship_location[0] not in self.BOARD_ROW_LABELS or guessed_ship_location[1:] not in self.BOARD_COL_LABELS or guessed_ship_location in self.GUESS_LIST:
+        while len(guessed_ship_location) < Board.get_min_input_size() or guessed_ship_location[0] not in Board.get_row_labels() or guessed_ship_location[1:] not in Board.get_col_labels() or guessed_ship_location in self.GUESS_LIST:
             if guessed_ship_location in self.GUESS_LIST:
                 guessed_ship_location = input(prompt_guessed_already).lower()
             else:
@@ -188,8 +258,8 @@ Guesses: {" ".join(self.GUESS_LIST)}
 
 
     def translate_input_to_board_location(self, guessed_ship_location: str) -> tuple:
-        ship_col = self.BOARD_COL_LABELS.index(guessed_ship_location[1:])
-        ship_row = self.BOARD_ROW_LABELS.index(guessed_ship_location[0])
+        ship_col = Board.get_col_labels().index(guessed_ship_location[1:])
+        ship_row = Board.get_row_labels().index(guessed_ship_location[0])
         return ship_col, ship_row
 
 
@@ -202,8 +272,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         For instance, d6 is 3 cells away from c8 because (3 - 2) + (7 - 5) = 3, so they'd be told they were "warm"
         Returns "hit" when distance is 0
         """
-        furthest_possible_distance = (self.BOARD_COL_SIZE + self.BOARD_ROW_SIZE) - 2
-        nearest_ship = furthest_possible_distance
+        nearest_ship = Board.get_max_board_distance()
         guessed_ship_col, guessed_ship_row = guessed_ship_location
 
         for ship in self.SHIPS_LIST:
@@ -237,7 +306,7 @@ How to play:
         - or "{self.COLD}" if further away
     - The icon for a hit is "{self.HIT_ICON}" and "{self.MISS_ICON}" for a miss
     - Guesses should be provided starting with the letter of the board and then the number
-      in this format {self.ROW_INPUT_FORMAT}{self.COL_INPUT_FORMAT} i.e d6
+      in this format {Board.get_row_input_format()}{Board.get_col_input_format()} i.e d6
     - Invalid or repeat inputs don't count as guesses, you'll be prompted to try again
 
 Enjoy the game!
@@ -254,19 +323,18 @@ Enjoy the game!
             if guess == self.HIT:
                 self.SHIPS_LIST.remove(guessed_ship_location)
                 self.NUM_OF_SUNK_SHIPS += 1
-                self.place_icon_on_board(
+                Board.place_icon_on_board(
                      board = self.PLAYING_BOARD
                     ,location = guessed_ship_location
                     ,icon = self.HIT_ICON
                 )
-                self.place_icon_on_board(
+                Board.remove_icon_from_board(
                      board = self.HIDDEN_BOARD
                     ,location = guessed_ship_location
-                    ,icon = self.BOARD_TILE_BLANK
                 )
 
             else:
-                self.place_icon_on_board(
+                Board.place_icon_on_board(
                      board = self.PLAYING_BOARD
                     ,location = guessed_ship_location
                     ,icon = self.MISS_ICON
@@ -286,7 +354,7 @@ Enjoy the game!
             When out of guesses display remaining ships on playing board
             """
             for ship_location in self.SHIPS_LIST:
-                self.place_icon_on_board(
+                Board.place_icon_on_board(
                      board = self.PLAYING_BOARD
                     ,location = ship_location
                     ,icon = self.SHIP_ICON

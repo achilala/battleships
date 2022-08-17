@@ -1,12 +1,12 @@
 import unittest
-from battleship import Battleship
+from battleships import Battleships
 
-class TestBattleship(unittest.TestCase):
+class TestBattleships(unittest.TestCase):
     """
     Here's an example of how I tested the distance_to_nearest_ship method using TDD
     """
     # instantiate test object
-    game = Battleship(
+    game = Battleships(
          num_of_ships=0
         ,num_of_total_guesses=0
         ,show_hidden_board=True
