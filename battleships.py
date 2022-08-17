@@ -5,7 +5,6 @@ class Board():
     The single responsibility of this class is the board
     The Board size is dynamic and depends on the number of labels
     """
-
     COL_LABELS = [
          "1"
         ,"2"
@@ -69,28 +68,28 @@ class Board():
 
     def get_min_input_size() -> int:
         """
-        This method returns the minimum allowed input size for a valid coordinate
+        This method returns the minimum allowed input size for a valid coordinate on the board
         """
         return Board.MIN_INPUT_SIZE
     
 
     def get_max_board_distance() -> int:
         """
-        This method returns the furthest possible distance between two locations on the board
+        This method returns the furthest possible distance between two coordinates on the board
         """
         return Board.MAX_BOARD_DISTANCE
     
 
     def get_col_input_format() -> str:
         """
-        This method returns the allowed range of column label inputs when prompted
+        This method returns the allowed range of column inputs
         """
         return Board.COL_INPUT_FORMAT
     
 
     def get_row_input_format() -> str:
         """
-        This method returns the allowed range of row label inputs when prompted
+        This method returns the allowed range of row inputs
         """
         return Board.ROW_INPUT_FORMAT
 
