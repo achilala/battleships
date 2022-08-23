@@ -94,14 +94,14 @@ class Board():
         return Board.ROW_INPUT_FORMAT
 
 
-    def create_board() -> list:
+    def create() -> list:
         """
         This method generates a board based on the size of the column and row labels
         """
         return [[Board.TILE_BLANK] * Board.COL_SIZE for _ in range(Board.ROW_SIZE)]
 
 
-    def display_board(board: list, board_title: str) -> None:
+    def display(board: list, board_title: str) -> None:
         """
         This method displays a board in a formatted and presentable manner and can include a title
         """
@@ -122,7 +122,7 @@ class Board():
         print(f"{board_name}\n")
 
 
-    def place_icon_on_board(board: list, location: tuple, icon: str) -> None:
+    def place_icon(board: list, location: tuple, icon: str) -> None:
         """
         This method is useful for writing and/or removing icons on/from a board
         Removed icons are simply replaced with a blank tile
@@ -131,7 +131,7 @@ class Board():
         board[ship_row][ship_col] = icon
 
 
-    def remove_icon_from_board(board: list, location: tuple) -> None:
+    def remove_icon(board: list, location: tuple) -> None:
         """
         This method is useful for writing and/or removing icons on/from a board
         Removed icons are simply replaced with a blank tile
@@ -157,8 +157,8 @@ class Battleships():
         self.NUM_OF_TOTAL_GUESSES = num_of_total_guesses
         self.SHOW_HIDDEN_BOARD = show_hidden_board
 
-        self.HIDDEN_BOARD = Board.create_board()
-        self.PLAYING_BOARD = Board.create_board()
+        self.HIDDEN_BOARD = Board.create()
+        self.PLAYING_BOARD = Board.create()
 
         self.SHIP_ICON = "s"
         self.HIT_ICON = "@"
@@ -181,7 +181,7 @@ class Battleships():
         """
         This method displays the hidden board
         """
-        Board.display_board(self.HIDDEN_BOARD, "Hidden Board")
+        Board.display(self.HIDDEN_BOARD, "Hidden Board")
 
 
     def display_playing_board(self) -> None:
@@ -192,7 +192,7 @@ class Battleships():
         if self.SHOW_HIDDEN_BOARD:
             self.display_hidden_board()
 
-        Board.display_board(self.PLAYING_BOARD, "Playing Board")
+        Board.display(self.PLAYING_BOARD, "Playing Board")
 
 
     def display_score_board(self, stdout: str) -> None:
@@ -227,7 +227,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         self.generate_random_ship_locations()
 
         for ship_location in self.SHIPS_LIST:
-            Board.place_icon_on_board(
+            Board.place_icon(
                  board = self.HIDDEN_BOARD
                 ,location = ship_location
                 ,icon = self.SHIP_ICON
@@ -322,18 +322,18 @@ Enjoy the game!
             if guess == self.HIT:
                 self.SHIPS_LIST.remove(guessed_ship_location)
                 self.NUM_OF_SUNK_SHIPS += 1
-                Board.place_icon_on_board(
+                Board.place_icon(
                      board = self.PLAYING_BOARD
                     ,location = guessed_ship_location
                     ,icon = self.HIT_ICON
                 )
-                Board.remove_icon_from_board(
+                Board.remove_icon(
                      board = self.HIDDEN_BOARD
                     ,location = guessed_ship_location
                 )
 
             else:
-                Board.place_icon_on_board(
+                Board.place_icon(
                      board = self.PLAYING_BOARD
                     ,location = guessed_ship_location
                     ,icon = self.MISS_ICON
@@ -353,7 +353,7 @@ Enjoy the game!
             When out of guesses display remaining ships on playing board
             """
             for ship_location in self.SHIPS_LIST:
-                Board.place_icon_on_board(
+                Board.place_icon(
                      board = self.PLAYING_BOARD
                     ,location = ship_location
                     ,icon = self.SHIP_ICON
