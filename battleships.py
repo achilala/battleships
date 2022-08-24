@@ -38,54 +38,55 @@ class Board():
     TILE_BLANK = " "
     TILE_EDGE = "|"    
 
+
     def get_col_labels() -> list:
         """
         This method returns column labels
         """
         return Board.COL_LABELS
-    
+
 
     def get_row_labels() -> list:
         """
         This method returns row labels
         """
         return Board.ROW_LABELS
-    
+
 
     def get_col_size() -> int:
         """
         This method returns column label size
         """
         return Board.COL_SIZE
-    
+
 
     def get_row_size() -> int:
         """
         This method returns row label size
         """
         return Board.ROW_SIZE
-    
+
 
     def get_min_input_size() -> int:
         """
         This method returns the minimum allowed input size for a valid coordinate on the board
         """
         return Board.MIN_INPUT_SIZE
-    
+
 
     def get_max_board_distance() -> int:
         """
         This method returns the furthest possible distance between two coordinates on the board
         """
         return Board.MAX_BOARD_DISTANCE
-    
+
 
     def get_col_input_format() -> str:
         """
         This method returns the allowed range of column inputs
         """
         return Board.COL_INPUT_FORMAT
-    
+
 
     def get_row_input_format() -> str:
         """
