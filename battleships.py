@@ -5,7 +5,7 @@ class Board():
     The single responsibility of this class is the board
     The Board size is dynamic and depends on the number of labels
     """
-    COL_LABELS = [
+    COL_LABELS = (
          "1"
         ,"2"
         ,"3"
@@ -16,8 +16,8 @@ class Board():
         ,"8"
         # ,"9"
         # ,"10"
-    ]
-    ROW_LABELS = [
+    )
+    ROW_LABELS = (
          "a"
         ,"b"
         ,"c"
@@ -28,9 +28,10 @@ class Board():
         ,"h"
         # ,"i"
         # ,"j"
-    ]
+    )
     COL_INPUT_FORMAT = f"[{COL_LABELS[0]}-{COL_LABELS[-1]}]"
     ROW_INPUT_FORMAT = f"[{ROW_LABELS[0]}-{ROW_LABELS[-1]}]"
+    INPUT_FORMAT = f"{ROW_INPUT_FORMAT}{COL_INPUT_FORMAT}"
     COL_SIZE = len(COL_LABELS)
     ROW_SIZE = len(ROW_LABELS)
     MIN_INPUT_SIZE = len(COL_LABELS[0]) + len(ROW_LABELS[0])
@@ -39,14 +40,14 @@ class Board():
     TILE_EDGE = "|"    
 
 
-    def get_col_labels() -> list:
+    def get_col_labels() -> tuple:
         """
         This method returns column labels
         """
         return Board.COL_LABELS
 
 
-    def get_row_labels() -> list:
+    def get_row_labels() -> tuple:
         """
         This method returns row labels
         """
@@ -81,18 +82,11 @@ class Board():
         return Board.MAX_BOARD_DISTANCE
 
 
-    def get_col_input_format() -> str:
+    def get_input_format() -> str:
         """
-        This method returns the allowed range of column inputs
+        This method returns the allowed range of inputs
         """
-        return Board.COL_INPUT_FORMAT
-
-
-    def get_row_input_format() -> str:
-        """
-        This method returns the allowed range of row inputs
-        """
-        return Board.ROW_INPUT_FORMAT
+        return Board.INPUT_FORMAT
 
 
     def create() -> list:
@@ -235,35 +229,35 @@ Guesses: {" ".join(self.GUESS_LIST)}
             )
 
 
-    def prompt_for_ship_location(self) -> str:
+    def prompt_for_guess(self) -> str:
         """
         This method prompts the user for a guess of a ship's location and returns the valid input
-        It also verifies that a valid entry is provided otherwise keeps prompting
-        Valid inputs are then added to a "guess list" :)
+        It also verifies that the format of the guess is valid otherwise keeps prompting
+        Valid inputs are then added to the "guess list", excuse the pun :)
         """        
         prompt_1st = f"\nPlease guess a ship's location: "
-        prompt_nth = f"\nInvalid entry provided, please re-try in this format {Board.get_row_input_format()}{Board.get_col_input_format()} i.e d6: "
+        prompt_nth = f"\nInvalid entry provided, please re-try in this format {Board.get_input_format()} i.e d6: "
         prompt_guessed_already = "\nYou've guessed that one already, please try another: "
         
-        guessed_ship_location = input(prompt_1st).lower()
+        guessed_location = input(prompt_1st).lower()
 
-        while len(guessed_ship_location) < Board.get_min_input_size() or guessed_ship_location[0] not in Board.get_row_labels() or guessed_ship_location[1:] not in Board.get_col_labels() or guessed_ship_location in self.GUESS_LIST:
-            if guessed_ship_location in self.GUESS_LIST:
-                guessed_ship_location = input(prompt_guessed_already).lower()
+        while len(guessed_location) < Board.get_min_input_size() or guessed_location[0] not in Board.get_row_labels() or guessed_location[1:] not in Board.get_col_labels() or guessed_location in self.GUESS_LIST:
+            if guessed_location in self.GUESS_LIST:
+                guessed_location = input(prompt_guessed_already).lower()
             else:
-                guessed_ship_location = input(prompt_nth).lower()
+                guessed_location = input(prompt_nth).lower()
 
-        self.GUESS_LIST.append(guessed_ship_location)
-        return guessed_ship_location
-
-
-    def translate_input_to_board_location(self, guessed_ship_location: str) -> tuple:
-        ship_col = Board.get_col_labels().index(guessed_ship_location[1:])
-        ship_row = Board.get_row_labels().index(guessed_ship_location[0])
-        return ship_col, ship_row
+        self.GUESS_LIST.append(guessed_location)
+        return guessed_location
 
 
-    def distance_to_nearest_ship(self, guessed_ship_location: tuple) -> str:
+    def translate_input_to_board_location(self, guessed_location: str) -> tuple:
+        ship_col = Board.get_col_labels().index(guessed_location[1:])
+        ship_row = Board.get_row_labels().index(guessed_location[0])
+        return (ship_col, ship_row)
+
+
+    def distance_to_nearest_ship(self, guessed_location: tuple) -> str:
         """
         This method determines the distance between the guessed location and the nearest ship
         The user enters a co-ordinate, for example d6 and the computer locates the nearest ship to that co-ordinate
@@ -273,7 +267,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         Returns "hit" when distance is 0
         """
         nearest_ship = Board.get_max_board_distance()
-        guessed_ship_col, guessed_ship_row = guessed_ship_location
+        guessed_ship_col, guessed_ship_row = guessed_location
 
         for ship in self.SHIPS_LIST:
             ship_col, ship_row = ship
@@ -306,7 +300,7 @@ How to play:
         - or "{self.COLD}" if further away
     - The icon for a hit is "{self.HIT_ICON}" and "{self.MISS_ICON}" for a miss
     - Guesses should be provided starting with the letter of the board and then the number
-      in this format {Board.get_row_input_format()}{Board.get_col_input_format()} i.e d6
+      in this format {Board.get_input_format()} i.e d6
     - Invalid or repeat inputs don't count as guesses, you'll be prompted to try again
 
 Enjoy the game!
@@ -315,28 +309,28 @@ Enjoy the game!
         self.display_playing_board()
 
         while self.NUM_OF_GUESSES < self.NUM_OF_TOTAL_GUESSES:
-            guessed_ship_location = self.translate_input_to_board_location(
-                self.prompt_for_ship_location()
+            guessed_location = self.translate_input_to_board_location(
+                self.prompt_for_guess()
             )
-            guess = self.distance_to_nearest_ship(guessed_ship_location)
+            guess = self.distance_to_nearest_ship(guessed_location)
 
             if guess == self.HIT:
-                self.SHIPS_LIST.remove(guessed_ship_location)
+                self.SHIPS_LIST.remove(guessed_location)
                 self.NUM_OF_SUNK_SHIPS += 1
                 Board.place_icon(
                      board = self.PLAYING_BOARD
-                    ,location = guessed_ship_location
+                    ,location = guessed_location
                     ,icon = self.HIT_ICON
                 )
                 Board.remove_icon(
                      board = self.HIDDEN_BOARD
-                    ,location = guessed_ship_location
+                    ,location = guessed_location
                 )
 
             else:
                 Board.place_icon(
                      board = self.PLAYING_BOARD
-                    ,location = guessed_ship_location
+                    ,location = guessed_location
                     ,icon = self.MISS_ICON
                 )
 
