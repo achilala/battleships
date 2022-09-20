@@ -32,10 +32,10 @@ class Board():
     COL_INPUT_FORMAT = f"[{COL_LABELS[0]}-{COL_LABELS[-1]}]"
     ROW_INPUT_FORMAT = f"[{ROW_LABELS[0]}-{ROW_LABELS[-1]}]"
     INPUT_FORMAT = f"{ROW_INPUT_FORMAT}{COL_INPUT_FORMAT}"
-    COL_SIZE = len(COL_LABELS)
-    ROW_SIZE = len(ROW_LABELS)
+    COL_LABEL_SIZE = len(COL_LABELS)
+    ROW_LABEL_SIZE = len(ROW_LABELS)
     MIN_INPUT_SIZE = len(COL_LABELS[0]) + len(ROW_LABELS[0])
-    MAX_BOARD_DISTANCE = (COL_SIZE + ROW_SIZE) - 2
+    MAX_BOARD_DISTANCE = (COL_LABEL_SIZE + ROW_LABEL_SIZE) - 2
     TILE_BLANK = " "
     TILE_EDGE = "|"    
 
@@ -54,18 +54,18 @@ class Board():
         return Board.ROW_LABELS
 
 
-    def get_col_size() -> int:
+    def get_col_label_size() -> int:
         """
         This method returns column label size
         """
-        return Board.COL_SIZE
+        return Board.COL_LABEL_SIZE
 
 
-    def get_row_size() -> int:
+    def get_row_label_size() -> int:
         """
         This method returns row label size
         """
-        return Board.ROW_SIZE
+        return Board.ROW_LABEL_SIZE
 
 
     def get_min_input_size() -> int:
@@ -93,7 +93,7 @@ class Board():
         """
         This method generates a board based on the size of the column and row labels
         """
-        return [[Board.TILE_BLANK] * Board.COL_SIZE for _ in range(Board.ROW_SIZE)]
+        return [[Board.TILE_BLANK] * Board.get_col_label_size() for _ in range(Board.get_row_label_size())]
 
 
     def display(board: list, board_title: str) -> None:
@@ -112,7 +112,7 @@ class Board():
             row_label_index += 1
 
         split_in_half = 0.5
-        title_padding_size = int(Board.COL_SIZE * split_in_half) + len(board_title)
+        title_padding_size = int(Board.get_col_label_size() * split_in_half) + len(board_title)
         board_name = board_title.rjust(title_padding_size, " ")
         print(f"{board_name}\n")
 
@@ -211,7 +211,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         This method generates random ship locations and adds them to a list of ships
         """
         while len(self.SHIPS_LIST) < self.NUM_OF_SHIPS:
-            ship_col, ship_row = randint(0, Board.get_col_size() - 1), randint(0, Board.get_row_size() - 1)
+            ship_col, ship_row = randint(0, Board.get_col_label_size() - 1), randint(0, Board.get_row_label_size() - 1)
             self.SHIPS_LIST.add((ship_col, ship_row))
 
 
