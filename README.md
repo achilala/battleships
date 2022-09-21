@@ -19,7 +19,7 @@ Some things to note:
 
 
 ## How to run the code
-Chose to go with Python, and code can be run from the CLI as follows:
+I chose to go with Python, and the code can be run from the CLI as follows:
 
 ### Play the game
 ```bash
@@ -31,8 +31,8 @@ python3 play_battleships.py
 python3 test_battleships.py
 ```
 
-### How To Instantiate the class
-You can override the default settings such as the number of ships and/or total guesses at runtime.
+### How To Instantiate a Game
+You can override the default settings at runtime such as the number of ships and/or total number of guesses.
 ```py
 from battleships import Battleships
 
@@ -43,12 +43,14 @@ game = Battleships(
 game.play()
 ```
 
-You can choose to show the hidden board for testing purposes as well.
+You can choose to show the hidden board as well for testing or debugging purposes.
 ```py
 from battleships import Battleships
 
 game = Battleships(
-    show_hidden_board=True
+     num_of_ships=3
+    ,num_of_max_guesses=15
+    ,show_hidden_board=True
 )
 game.play()
 ```
