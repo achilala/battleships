@@ -14,8 +14,6 @@ class Board():
         ,"6"
         ,"7"
         ,"8"
-        # ,"9"
-        # ,"10"
     )
     ROW_LABELS = (
          "a"
@@ -26,8 +24,6 @@ class Board():
         ,"f"
         ,"g"
         ,"h"
-        # ,"i"
-        # ,"j"
     )
     COL_INPUT_FORMAT = f"[{COL_LABELS[0]}-{COL_LABELS[-1]}]"
     ROW_INPUT_FORMAT = f"[{ROW_LABELS[0]}-{ROW_LABELS[-1]}]"
@@ -235,7 +231,7 @@ Guesses: {" ".join(self.GUESS_LIST)}
         It also verifies that the format of the guess is valid otherwise keeps prompting
         Valid inputs are then added to the "guess list", excuse the pun :)
         """        
-        prompt_1st = f"\nPlease guess a ship's location: "
+        prompt_1st = "\nPlease guess a ship's location: "
         prompt_nth = f"\nInvalid entry provided, please re-try in this format {Board.get_input_format()} i.e d6: "
         prompt_guessed_already = "\nYou've guessed that one already, please try another: "
         
