@@ -33,7 +33,7 @@ class Board():
     MIN_INPUT_SIZE = len(COL_LABELS[0]) + len(ROW_LABELS[0])
     MAX_BOARD_DISTANCE = (COL_LABEL_SIZE + ROW_LABEL_SIZE) - 2
     TILE_BLANK = " "
-    TILE_EDGE = "|"    
+    TILE_EDGE = "|"
 
 
     def get_col_labels() -> tuple:
